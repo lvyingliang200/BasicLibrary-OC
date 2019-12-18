@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'BasicLibrary-OC_Example' do
+  pod 'BasicLibrary-OC', :path => '../'
+
+  target 'BasicLibrary-OC_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
