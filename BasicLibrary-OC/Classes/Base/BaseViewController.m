@@ -15,6 +15,7 @@
 
 @implementation BaseViewController
 
+#pragma mark -- life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configBaseViewControllerNavi];
@@ -27,11 +28,59 @@
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
+#pragma mark -- actions
+- (void)pushController:(UIViewController *)controller
+{
+    if (!controller) {return;}
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)popSelfAndPushController:(UIViewController *)viewController
+{
+    NSMutableArray *viewCtrollers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+    [viewCtrollers removeObject:self];
+    viewController.hidesBottomBarWhenPushed = viewCtrollers.count > 0 ? YES : NO;
+    [viewCtrollers addObject:viewController];
+    [self.navigationController setViewControllers:viewCtrollers animated:YES];
+}
 
+- (void)popAndPushViewController:(UIViewController *)viewController removeVC:(NSArray<Class> *)removedControllers
+{
+    NSMutableArray<UIViewController *> *viewCtrollers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+    NSMutableArray<UIViewController *> *removes = [NSMutableArray array];
+    [viewCtrollers enumerateObjectsUsingBlock:^(UIViewController *ovc, NSUInteger idx, BOOL *stop) {
+        for(Class clazz in removedControllers){
+            if([ovc isKindOfClass:clazz]){
+                [removes addObject:ovc];
+                break;
+            }
+        }
+    }];
+    [viewCtrollers removeObjectsInArray:removes];
+    viewController.hidesBottomBarWhenPushed = viewCtrollers.count > 0 ? YES : NO;
+    [viewCtrollers addObject:viewController];
+    [self.navigationController setViewControllers:viewCtrollers animated:YES];
+}
+
+#pragma mark -- BaseViewProtocol
+- (void)showHUD
+{
+    
+}
+
+- (void)hideHUD
+{
+    
+}
+
+- (void)backWithErrorMsg:(NSString *)errorMsg
+{
+    
+}
 
 @end
