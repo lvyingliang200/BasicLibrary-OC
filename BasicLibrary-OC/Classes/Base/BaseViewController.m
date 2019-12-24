@@ -9,7 +9,6 @@
 #import "BaseViewController.h"
 
 @interface BaseViewController ()
-<UIGestureRecognizerDelegate>
 
 @end
 
@@ -25,7 +24,6 @@
 {
     self.view.backgroundColor = UIColor.whiteColor;
     [self.navigationController setNavigationBarHidden:YES];
-    self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
 #pragma mark -- actions
@@ -44,7 +42,7 @@
 {
     NSMutableArray *viewCtrollers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
     [viewCtrollers removeObject:self];
-    viewController.hidesBottomBarWhenPushed = viewCtrollers.count > 0 ? YES : NO;
+    viewController.hidesBottomBarWhenPushed = viewCtrollers.count > 0;
     [viewCtrollers addObject:viewController];
     [self.navigationController setViewControllers:viewCtrollers animated:YES];
 }
@@ -62,7 +60,7 @@
         }
     }];
     [viewCtrollers removeObjectsInArray:removes];
-    viewController.hidesBottomBarWhenPushed = viewCtrollers.count > 0 ? YES : NO;
+    viewController.hidesBottomBarWhenPushed = viewCtrollers.count > 0;
     [viewCtrollers addObject:viewController];
     [self.navigationController setViewControllers:viewCtrollers animated:YES];
 }
@@ -80,7 +78,7 @@
 
 - (void)backWithErrorMsg:(NSString *)errorMsg
 {
-    
+    [self back];
 }
 
 @end
