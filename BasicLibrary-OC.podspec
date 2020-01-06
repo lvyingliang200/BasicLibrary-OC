@@ -21,6 +21,7 @@ Pod::Spec.new do |s|
                         文件分类如下：
                         Base -> 基础类文件
                         ExternCategory -> 分类文件
+                        Tools -> 工具类
                        DESC
 
   s.homepage         = 'https://github.com/lvyingliang200/BasicLibrary-OC'
