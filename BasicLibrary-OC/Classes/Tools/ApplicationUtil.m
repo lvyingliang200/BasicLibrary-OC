@@ -9,4 +9,19 @@
 
 @implementation ApplicationUtil
 
++ (void)openAppWithUrlScheme:(NSString *)urlScheme
+{
+    UIApplication *application = [UIApplication sharedApplication];
+    NSURL *url = [NSURL URLWithString:urlScheme];
+    if ([application canOpenURL:url]) {
+        [application openURL:url];
+    }
+}
+
++ (void)makeATelephoneCallWithPhoneNumber:(NSString *)phoneNumber
+{
+    NSString *urlStr = [NSString stringWithFormat:@"telprompt://%@",phoneNumber];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr]];
+}
+
 @end
