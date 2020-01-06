@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 拨打电话
 + (void)makeATelephoneCallWithPhoneNumber:(NSString *)phoneNumber;
 
+/// 用户是否打开通知
++ (BOOL)isUserEnabledNotification;
+
 @end
 
 NS_ASSUME_NONNULL_END

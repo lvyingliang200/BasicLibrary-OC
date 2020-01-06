@@ -24,4 +24,12 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr]];
 }
 
+#pragma mark -- 是否打开推送检测
++ (BOOL)isUserEnabledNotification
+{
+    UIUserNotificationSettings *setting = [[UIApplication sharedApplication] currentUserNotificationSettings];
+    BOOL notEnable = UIUserNotificationTypeNone == setting.types;
+    return !notEnable;
+}
+
 @end
