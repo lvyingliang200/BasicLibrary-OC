@@ -19,6 +19,17 @@ NS_ASSUME_NONNULL_BEGIN
 /// 请求头参数
 @property (nonatomic,strong) NSMutableDictionary *headParam;
 
+/// 不带返回信息的请求
+- (void)requestWithURLString:(NSString *)URLString
+           requestParameters:(NSObject *)request callback:(ResponseCallback)callback;
+
+/// 需要返回信息的请求
+/// @param URLString 请求地址
+/// @param request 请求对象
+/// @param responseName 返回信息类名
+/// @param callback 回调块
+- (void)requestWithURLString:(NSString *)URLString
+           requestParameters:(NSObject *)request responseClassName:(NSString *)responseName callback:(ResponseInfoCallback)callback;
 @end
 
 NS_ASSUME_NONNULL_END

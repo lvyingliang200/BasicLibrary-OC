@@ -40,46 +40,44 @@ static AFHTTPSessionManager *manager;
     return self;
 }
 
-- (void)postJsonWithURLString:(NSString *)URLString
+- (void)requestWithURLString:(NSString *)URLString
             requestParameters:(NSObject *)request callback:(ResponseCallback)callback
 {
-    [self configHeaderAndResponseTypes];
-    [manager POST:URLString parameters:request.mj_keyValues progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
-        BaseResponse *response = [BaseResponse mj_objectWithKeyValues:responseObject];
+    [self postJsonWithURLString:URLString requestParameters:request.mj_keyValues callback:^(BOOL success, NSDictionary *res) {
+        BaseResponse *response = [BaseResponse mj_objectWithKeyValues:res];
         NSString *msg = [self checkResponse:response];
-        if (!callback) return;
         if(success && msg == nil){
             callback(YES, nil);
         }else{
             callback(NO, msg);
         }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        !callback ? : callback(NO,nil);
     }];
 }
 
-- (void)postJsonWithURLString:(NSString *)URLString
+- (void)requestWithURLString:(NSString *)URLString
             requestParameters:(NSObject *)request responseClassName:(NSString *)responseName callback:(ResponseInfoCallback)callback
 {
-    [self configHeaderAndResponseTypes];
-    
-    [manager POST:URLString parameters:request.mj_keyValues progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-    //        NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
-        BaseResponse *response = [NSClassFromString(responseName) mj_objectWithKeyValues:responseObject];
+    [self postJsonWithURLString:URLString requestParameters:request.mj_keyValues callback:^(BOOL success, NSDictionary *res) {
+        BaseResponse *response = [NSClassFromString(responseName) mj_objectWithKeyValues:res];
         NSString *msg = [self checkResponse:response];
-        BaseResponse *response = [BaseResponse mj_objectWithKeyValues:responseObject];
-        NSString *msg = [self checkResponse:response];
-        if (!callback) return;
         if(success && msg == nil){
             callback(YES, nil, response);
         }else{
             callback(NO, msg, nil);
         }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            !callback ? : callback(NO, msg, nil);
     }];
-    
+}
+
+- (void)postJsonWithURLString:(NSString *)URLString
+            requestParameters:(NSObject *)request callback:(void (^)(BOOL success,NSDictionary * res))callback
+{
+    [self configHeaderAndResponseTypes];
+    [manager POST:URLString parameters:request.mj_keyValues progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
+        !callback ? : callback(YES,dic);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            !callback ? : callback(NO, nil);
+    }];
 }
 
 - (void)configHeaderAndResponseTypes
@@ -99,7 +97,7 @@ static AFHTTPSessionManager *manager;
     }else if(response != nil && (response.code == 100 || response.code == 10500)){
 //        [[AppContext itself] logout: @"登录错误或超时,请重新登录"];
         return response.msg;
-    }else if(response!=nil){
+    }else if(response != nil){
         return response.msg;
     }else{
         return @"服务器无法响应,请检查网络";

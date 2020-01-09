@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'BasicLibrary-OC'
-  s.version          = '0.2.0'
+  s.version          = '0.2.1'
   s.summary          = 'A basic library for Objective-C developers.'
 
 # This description is used to generate tags and improve search results.
